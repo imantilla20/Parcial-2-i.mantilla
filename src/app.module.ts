@@ -6,8 +6,11 @@ import { AuthorizationModule } from '@nestjs/authorization';
 import { UsersModule } from './users/users.module.js';
 import { RolesModule } from './roles/roles.module.js';
 import { AuthModule } from './auth/auth.module.js';
+import { ParkingSpotsModule } from './parking_spots/parking_spots.module.js';
+import { ReservationsModule } from './reservations/reservations.module.js';
 import { InitSchema1764000000000 } from './migrations/1764000000000-InitSchema.js';
 import { SeedAdmin1764000000001 } from './migrations/1764000000001-SeedAdmin.js';
+import { CreateReservation1764000000002 } from './migrations/1764000000002-CreateReservation.js';
 
 @Module({
   imports: [
@@ -23,7 +26,7 @@ import { SeedAdmin1764000000001 } from './migrations/1764000000001-SeedAdmin.js'
         database: config.getOrThrow<string>('DB_NAME'),
         autoLoadEntities: true,
         synchronize: true,                  // actualiza tablas 
-        migrations: [InitSchema1764000000000, SeedAdmin1764000000001],
+        migrations: [InitSchema1764000000000, SeedAdmin1764000000001, CreateReservation1764000000002], // migraciones
         migrationsRun: true,                // corre las migraciones pendientes al arrancar (van ANTES que synchronize)
       }),
     }),
@@ -44,6 +47,9 @@ import { SeedAdmin1764000000001 } from './migrations/1764000000001-SeedAdmin.js'
     UsersModule,
     RolesModule,
     AuthModule,
+    ParkingSpotsModule,
+    ReservationsModule,
+
   ],
 })
 export class AppModule {}
