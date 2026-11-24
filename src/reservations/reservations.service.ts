@@ -29,19 +29,6 @@ export class UsersService {
     return this.usersRepo.findOneBy({ email });
   }
 
-  /** Usuario con sus roles, o null (= 401). */
-  findActiveWithRoles(id: string): Promise<User | null> {
-    return this.usersRepo.findOne({ where: { id, is_active: true }, relations: { roles: true } });
-  }
-
-  async getProfile(id: string) {
-    const user = await this.usersRepo.findOne({ where: { id }, relations: { roles: true } });
-    if (!user) throw new NotFoundException('Usuario no encontrado');
-    return {                                   // NUNCA sale password
-      id: user.id, email: user.email, name: user.name, phone: user.phone,
-      roles: user.roles.map((r) => r.role_name),
-    };
-  }
 
   async findAll() {
     try {
@@ -54,18 +41,4 @@ export class UsersService {
     }
   }
 
-  async assignRoles(id: string, roleNames: string[]) {
-    const user = await this.usersRepo.findOne({ where: { id }, relations: { roles: true } });
-    if (!user) throw new NotFoundException('Usuario no encontrado');
-
-    const uniqueNames = [...new Set(roleNames)];
-    const roles = await this.rolesRepo.findBy({ role_name: In(uniqueNames) });
-    if (roles.length !== uniqueNames.length) {         
-      throw new BadRequestException('roles inválidos');
-    }
-
-    user.roles = roles;            // reemplaza los roles del usuario por los enviados
-    await this.usersRepo.save(user);
-    return { message: 'Roles asignados' };
-  }
 }
