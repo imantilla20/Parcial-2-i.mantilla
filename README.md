@@ -1,4 +1,4 @@
-# Preparcial 2 — Sistema de usuarios y roles (ISIS3710)
+# Parcial 2 — Isabela Mantilla Mora 202215383
 
 API REST con NestJS para manejar usuarios y roles:
 
